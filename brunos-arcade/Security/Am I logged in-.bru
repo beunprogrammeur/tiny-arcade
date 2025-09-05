@@ -1,0 +1,15 @@
+meta {
+  name: Am I logged in?
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{BaseURL}}/Security/IsLoggedIn
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+}

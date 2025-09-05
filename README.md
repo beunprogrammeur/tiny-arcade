@@ -9,3 +9,9 @@ The API will then use that value as your token, it is recommended to make longer
 but as it runs locally, I mainly did it this way so we don't have the key saved in the repository.
 
 if you've already opened visual studio, simply close it and reopen for the key to be picked up.
+
+
+# testing the API
+
+if you want to test the API, run requests etc, I've included a bruno collection.
+you can find bruno at [it's own website](https://www.usebruno.com/)

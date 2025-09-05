@@ -1,0 +1,26 @@
+meta {
+  name: Login
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{BaseURL}}/Security/Login
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "UserName": "TestUser",
+    "Password": "TestPassword"
+  }
+}
+
+script:post-response {
+  bru.setEnvVar("bearer_token", res.body.bearer);
+}
+
+settings {
+  encodeUrl: true
+}
