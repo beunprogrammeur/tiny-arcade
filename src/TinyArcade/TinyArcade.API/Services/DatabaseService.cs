@@ -1,4 +1,5 @@
 ﻿using Microsoft.Data.Sqlite;
+using TinyArcade.API.DatabaseModels;
 using TinyArcade.API.Models;
 using TinyArcade.API.Services.Interfaces;
 
@@ -29,8 +30,7 @@ namespace TinyArcade.API.Services
         {
             SQLitePCL.Batteries.Init();
 
-            string query = LoadQuery("Initialise.sql");
-            ExecuteQuery(query);
+            ExecuteQuery("Initialise.sql");
         }
 
         #region query prep
@@ -44,32 +44,82 @@ namespace TinyArcade.API.Services
             return reader.ReadToEnd();
         }
 
-        private void ExecuteQuery(string query, params Tuple<string, string>[] parameters)
+        private int ExecuteQuery(string queryFile, params (string, string)[] parameters)
         {
             using var connection = new SqliteConnection(_connectionString);
             connection.Open();
             
             var command = connection.CreateCommand();
-            command.CommandText = query;
+            command.CommandText = LoadQuery(queryFile);
 
             foreach ((var variable, var value) in parameters)
             {
                 command.Parameters.AddWithValue(variable, value);
             }
 
-            command.ExecuteNonQuery();
+            return command.ExecuteNonQuery();
+        }
+
+        private SqliteDataReader ExecuteReader(string queryFile, params (string, string)[] parameters)
+        {
+            var connection = new SqliteConnection(_connectionString);
+            connection.Open();
+
+            var command = connection.CreateCommand();
+            command.CommandText = LoadQuery(queryFile);
+
+            foreach ((var variable, var value) in parameters)
+            {
+                command.Parameters.AddWithValue(variable, value);
+            }
+
+            return command.ExecuteReader();
         }
         #endregion
 
         #region queries
 
-        public void AddUser(string username, string passwordHash, string role)
+        public void AddUser(string userName, string passwordHash, string role) => 
+            ExecuteQuery("AddUser.sql",
+                ("@UserName", userName),
+                ("@PasswordHash", passwordHash),
+                ("@Role", role));
+
+        public bool FindUser(string userName)
         {
-            string query = LoadQuery("AddUser.sql");
-            ExecuteQuery(query,
-                Tuple.Create("@Username", username),
-                Tuple.Create("@PasswordHash", passwordHash),
-                Tuple.Create("@Role", role));
+            using var reader = ExecuteReader("FindUser.sql",
+                ("@UserName", userName));
+
+            return reader.Read() && reader.GetInt32(0) > 0;
+        }
+            
+        public void SetUserRole(string userName, string? role) =>
+            ExecuteQuery("SetUserRole.sql",
+                ("@UserName", userName),
+                ("@Role", role));
+
+        public void SetUserPassword(string userName, string passwordHash) =>
+            ExecuteQuery("SetUserPassword.sql",
+                ("@UserName", userName),
+                ("@PasswordHash", passwordHash));
+
+        public DBUser? GetUser(string userName)
+        {
+            using var reader = ExecuteReader("GetUser.sql",
+                ("@UserName", userName));
+
+            if (reader.Read())
+            {
+                return new DBUser()
+                {
+                    Id = reader.GetInt32(0),
+                    Name = reader.GetString(1),
+                    Role = reader.GetString(2),
+                    PasswordHash = reader.GetString(3)
+                };
+            }
+
+            return null;
         }
         #endregion
     }

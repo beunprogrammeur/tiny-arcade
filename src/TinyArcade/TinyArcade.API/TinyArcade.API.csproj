@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Queries\GetUser.sql" />
+    <EmbeddedResource Include="Queries\SetUserPassword.sql" />
+    <EmbeddedResource Include="Queries\SetUserRole.sql" />
+    <EmbeddedResource Include="Queries\FindUser.sql" />
     <EmbeddedResource Include="Queries\AddUser.sql" />
     <EmbeddedResource Include="Queries\Initialise.sql" />
   </ItemGroup>

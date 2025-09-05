@@ -1,11 +1,11 @@
 meta {
-  name: Set role
+  name: Create user
   type: http
-  seq: 3
+  seq: 5
 }
 
 post {
-  url: {{BaseURL}}/Security/SetRole
+  url: {{BaseURL}}/Security/CreateUser
   body: json
   auth: bearer
 }
@@ -17,8 +17,7 @@ auth:bearer {
 body:json {
   {
     "UserName": "TestUser",
-    "Role": "Admin",
-    "Password": ""
+    "Password": "TestPassword"
   }
 }
 

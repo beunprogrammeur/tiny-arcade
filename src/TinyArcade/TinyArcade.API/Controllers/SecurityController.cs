@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Reflection.Metadata.Ecma335;
 using TinyArcade.API.Models;
 using TinyArcade.API.Services.Interfaces;
 
@@ -18,7 +19,7 @@ namespace TinyArcade.API.Controllers
         [HttpPost("Login")]
         public IActionResult Login([FromBody] CredentialModel credentials)
         {
-            if(_securityService.Login(credentials.UserName, credentials.Password, out string jwt))
+            if (_securityService.Login(credentials.UserName, credentials.Password, out string jwt))
             {
                 return Ok(BaseModel.Ok(jwt));
             }
@@ -37,14 +38,36 @@ namespace TinyArcade.API.Controllers
         [Authorize]
         public IActionResult ChangePassword([FromBody] CredentialModel credentials)
         {
-            return BadRequest("not implemented");
+            if (_securityService.ChangePassword(credentials.UserName, credentials.OldPassword, credentials.Password))
+            {
+                return Ok(BaseModel.Ok());
+            }
+
+
+            return BadRequest(BaseModel.Fail());
         }
 
         [HttpPost("SetRole")]
         [Authorize(Roles = "Admin")]
         public IActionResult SetRole([FromBody] CredentialModel credentials)
         {
-            return BadRequest("not implemented");
+            if(_securityService.SetRole(credentials.UserName, credentials.Role))
+            {
+                return Ok(BaseModel.Ok());
+            }
+
+            return BadRequest(BaseModel.Fail());
+        }
+
+        [HttpPost("CreateUser")]
+        public IActionResult CreateUser([FromBody] CredentialModel credentials)
+        {
+            if(_securityService.CreateUser(credentials.UserName, credentials.Password))
+            {
+                return Ok(BaseModel.Ok());
+            }
+
+            return BadRequest(BaseModel.Fail());
         }
     }
 }
