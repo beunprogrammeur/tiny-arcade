@@ -1,0 +1,15 @@
+meta {
+  name: Get consoles
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{BaseURL}}/Arcade/GetConsoles
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+}

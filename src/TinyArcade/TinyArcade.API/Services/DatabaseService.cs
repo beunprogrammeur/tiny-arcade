@@ -1,4 +1,5 @@
 ﻿using Microsoft.Data.Sqlite;
+using System.Data;
 using TinyArcade.API.DatabaseModels;
 using TinyArcade.API.Models;
 using TinyArcade.API.Services.Interfaces;
@@ -14,23 +15,6 @@ namespace TinyArcade.API.Services
         public DatabaseService(IConfiguration configuration)
         {
             _connectionString = configuration.GetConnectionString("DefaultConnection");
-        }
-
-        public IList<ConsoleModel> GetConsoles()
-        {
-            throw new NotImplementedException();
-        }
-
-        public IList<GameModel> GetGames(int consoleId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Initialise()
-        {
-            SQLitePCL.Batteries.Init();
-
-            ExecuteQuery("Initialise.sql");
         }
 
         #region query prep
@@ -78,6 +62,15 @@ namespace TinyArcade.API.Services
         #endregion
 
         #region queries
+        
+        public void Initialise()
+        {
+            SQLitePCL.Batteries.Init();
+
+            ExecuteQuery("Initialise.sql");
+        }
+
+        #region security
 
         public void AddUser(string userName, string passwordHash, string role) => 
             ExecuteQuery("AddUser.sql",
@@ -121,6 +114,59 @@ namespace TinyArcade.API.Services
 
             return null;
         }
+        #endregion
+
+        #region gaming
+
+        public void AddConsole(DBConsole console) => 
+            ExecuteQuery("AddConsole.sql",
+                ("@Name", console.Name));
+
+        public IList<DBConsole> GetConsoles()
+        {
+            using var reader = ExecuteReader("GetConsoles.sql");
+            List<DBConsole> consoles = [];
+
+            while (reader.Read()) 
+            {
+                consoles.Add(new DBConsole()
+                {
+                    Id = reader.GetInt32(0),
+                    Name = reader.GetString(1)
+                });
+            }
+
+            return consoles;
+        }
+
+        public void AddGame(DBGame game) => 
+            ExecuteQuery("AddGame.sql",
+                ("@ConsoleId", game.ConsoleId.ToString()),
+                ("@Name", game.Name),
+                ("@Description", game.Description));
+
+        public IList<DBGame> GetGames(int consoleId)
+        {
+            using var reader = ExecuteReader("GetGames.sql",
+                ("@ConsoleId", consoleId.ToString()));
+
+            List<DBGame> games = [];
+            while (reader.Read())
+            {
+                games.Add(new DBGame()
+                {
+                    Id = reader.GetInt32(0),
+                    ConsoleId = reader.GetInt32(1),
+                    Name = reader.GetString(2),
+                    Description = reader.GetString(3)
+                });
+            }
+
+            return games;
+        }
+
+        #endregion
+
         #endregion
     }
 }

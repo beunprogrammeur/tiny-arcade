@@ -1,0 +1,26 @@
+meta {
+  name: Add game
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{BaseURL}}/Arcade/AddGame
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{bearer_token}}
+}
+
+body:json {
+  {
+    "ConsoleId": "1",
+    "Name":"Super mario bros"
+  }
+}
+
+settings {
+  encodeUrl: true
+}

@@ -42,6 +42,8 @@ builder.Services.AddSingleton<IDatabaseService, DatabaseService>();
 builder.Services.AddSingleton<ISecurityService, SecurityService>();
 builder.Services.AddSingleton<ITokenService, TokenService>();
 
+//TODO: should be scoped, but I want to fix other stuff first
+builder.Services.AddSingleton<IUserContext, UserContext>();
 
 var app = builder.Build();
 

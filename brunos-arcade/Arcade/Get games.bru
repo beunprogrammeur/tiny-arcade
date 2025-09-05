@@ -1,0 +1,19 @@
+meta {
+  name: Get games
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{BaseURL}}/Arcade/GetGames?ConsoleId=1
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ConsoleId: 1
+}
+
+settings {
+  encodeUrl: true
+}

@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Queries\AddConsole.sql" />
+    <EmbeddedResource Include="Queries\GetConsoles.sql" />
+    <EmbeddedResource Include="Queries\GetGames.sql" />
+    <EmbeddedResource Include="Queries\AddGame.sql" />
     <EmbeddedResource Include="Queries\GetUser.sql" />
     <EmbeddedResource Include="Queries\SetUserPassword.sql" />
     <EmbeddedResource Include="Queries\SetUserRole.sql" />

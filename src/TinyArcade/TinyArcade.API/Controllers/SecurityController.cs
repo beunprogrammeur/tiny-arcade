@@ -20,7 +20,7 @@ namespace TinyArcade.API.Controllers
         {
             if (_securityService.Login(credentials.UserName, credentials.Password, out string jwt))
             {
-                return Ok(BaseModel.Ok(jwt));
+                return Ok(BaseModel.Ok(bearer: jwt));
             }
 
             return Unauthorized(BaseModel.Fail());
@@ -37,7 +37,7 @@ namespace TinyArcade.API.Controllers
         [Authorize]
         public IActionResult ChangePassword([FromBody] CredentialModel credentials)
         {
-            if (_securityService.ChangePassword(credentials.UserName, credentials.OldPassword, credentials.Password))
+            if (_securityService.ChangePassword(credentials.OldPassword, credentials.Password))
             {
                 return Ok(BaseModel.Ok());
             }
