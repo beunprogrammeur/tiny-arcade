@@ -1,0 +1,6 @@
+@TinyArcade.API_HostAddress = http://localhost:5209
+
+GET {{TinyArcade.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
