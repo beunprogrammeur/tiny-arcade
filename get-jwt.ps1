@@ -1,0 +1,1 @@
+echo $env:Jwt__Key
