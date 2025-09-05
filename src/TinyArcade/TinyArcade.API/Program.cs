@@ -36,8 +36,10 @@ builder.Services.AddAuthorization(options =>
 });
 
 
-builder.Services.AddScoped<ISecurityService, SecurityService>();
-builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddSingleton<IArcadeService, ArcadeService>();
+builder.Services.AddSingleton<IDatabaseService, DatabaseService>();
+builder.Services.AddSingleton<ISecurityService, SecurityService>();
+builder.Services.AddSingleton<ITokenService, TokenService>();
 
 var app = builder.Build();
 
@@ -48,11 +50,11 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllers();
 
+var dbService = app.Services.GetRequiredService<IDatabaseService>();
+dbService.Initialise();
 
 app.Run();
