@@ -1,0 +1,26 @@
+meta {
+  name: Set role
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{BaseURL}}/Security/SetRole
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{bearer_token}}
+}
+
+body:json {
+  {
+    "UserName": "TestUser",
+    "Role":"Admin"
+  }
+}
+
+settings {
+  encodeUrl: true
+}

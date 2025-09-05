@@ -7,7 +7,11 @@ meta {
 get {
   url: {{BaseURL}}/Security/IsLoggedIn
   body: none
-  auth: inherit
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{bearer_token}}
 }
 
 settings {
