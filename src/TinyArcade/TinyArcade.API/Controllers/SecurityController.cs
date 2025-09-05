@@ -1,13 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Reflection.Metadata.Ecma335;
 using TinyArcade.API.Models;
 using TinyArcade.API.Services.Interfaces;
 
 namespace TinyArcade.API.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class SecurityController : ControllerBase
     {
         private readonly ISecurityService _securityService;
@@ -51,7 +50,7 @@ namespace TinyArcade.API.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult SetRole([FromBody] CredentialModel credentials)
         {
-            if(_securityService.SetRole(credentials.UserName, credentials.Role))
+            if (_securityService.SetRole(credentials.UserName, credentials.Role))
             {
                 return Ok(BaseModel.Ok());
             }
@@ -62,7 +61,7 @@ namespace TinyArcade.API.Controllers
         [HttpPost("CreateUser")]
         public IActionResult CreateUser([FromBody] CredentialModel credentials)
         {
-            if(_securityService.CreateUser(credentials.UserName, credentials.Password))
+            if (_securityService.CreateUser(credentials.UserName, credentials.Password))
             {
                 return Ok(BaseModel.Ok());
             }
