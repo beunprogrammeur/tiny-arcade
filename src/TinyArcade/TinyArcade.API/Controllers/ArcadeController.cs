@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using TinyArcade.API.Models;
 using TinyArcade.API.Services.Interfaces;
 
@@ -21,6 +22,7 @@ namespace TinyArcade.API.Controllers
         }
 
         [HttpPost("AddConsole")]
+        [Authorize(Roles = "Admin")]
         public IActionResult AddConsole([FromBody] ConsoleModel console)
         {
             _arcadeService.AddConsole(console);
@@ -34,6 +36,7 @@ namespace TinyArcade.API.Controllers
         }
 
         [HttpPost("AddGame")]
+        [Authorize(Roles = "Admin")]
         public IActionResult Addgame([FromBody]GameModel game)
         {
             _arcadeService.AddGame(game);
