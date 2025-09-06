@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using TinyArcade.API.Middleware;
 using TinyArcade.API.Services;
 using TinyArcade.API.Services.Interfaces;
 
@@ -36,8 +37,12 @@ builder.Services.AddAuthorization(options =>
 });
 
 
+builder.Services.AddScoped<IArcadeService, ArcadeService>();
+builder.Services.AddScoped<IDatabaseService, DatabaseService>();
 builder.Services.AddScoped<ISecurityService, SecurityService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+
+builder.Services.AddScoped<IUserContext, UserContext>();
 
 var app = builder.Build();
 
@@ -48,11 +53,15 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllers();
 
+app.UseMiddleware<UserContextMiddleware>();
+
+app.Services.CreateScope()
+    .ServiceProvider
+    .GetRequiredService<IDatabaseService>()
+    .Initialise();
 
 app.Run();

@@ -1,11 +1,11 @@
 meta {
-  name: Set role
+  name: Add game
   type: http
   seq: 3
 }
 
 post {
-  url: {{BaseURL}}/Security/SetRole
+  url: {{BaseURL}}/Arcade/AddGame
   body: json
   auth: bearer
 }
@@ -16,9 +16,8 @@ auth:bearer {
 
 body:json {
   {
-    "UserName": "TestUser",
-    "Role": "Admin",
-    "Password": ""
+    "ConsoleId": "1",
+    "Name":"Super mario bros"
   }
 }
 

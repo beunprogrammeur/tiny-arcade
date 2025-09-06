@@ -1,11 +1,11 @@
 meta {
-  name: Set role
+  name: Add console
   type: http
-  seq: 3
+  seq: 2
 }
 
 post {
-  url: {{BaseURL}}/Security/SetRole
+  url: {{BaseURL}}/Arcade/AddConsole
   body: json
   auth: bearer
 }
@@ -16,9 +16,7 @@ auth:bearer {
 
 body:json {
   {
-    "UserName": "TestUser",
-    "Role": "Admin",
-    "Password": ""
+    "Name": "NES"
   }
 }
 

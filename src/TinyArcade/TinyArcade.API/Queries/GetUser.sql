@@ -1,0 +1,1 @@
+﻿SELECT Id, UserName, Role, PasswordHash FROM Users WHERE UserName = @UserName;

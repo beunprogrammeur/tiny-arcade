@@ -1,13 +1,17 @@
 meta {
-  name: Login
+  name: Create user
   type: http
-  seq: 1
+  seq: 5
 }
 
 post {
-  url: {{BaseURL}}/Security/Login
+  url: {{BaseURL}}/Security/CreateUser
   body: json
-  auth: inherit
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{bearer_token}}
 }
 
 body:json {
@@ -15,10 +19,6 @@ body:json {
     "UserName": "TestUser",
     "Password": "TestPassword"
   }
-}
-
-script:post-response {
-  bru.setEnvVar("bearer_token", res.body.results);
 }
 
 settings {
