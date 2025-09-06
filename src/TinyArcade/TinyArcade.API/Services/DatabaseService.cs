@@ -8,13 +8,15 @@ namespace TinyArcade.API.Services
 {
     public class DatabaseService : IDatabaseService
     {
+        private const string _queryNamespace = "TinyArcade.API.Queries";
+
         private readonly IConfiguration _configuration;
         private readonly string _connectionString;
-        private const string _queryNamespace = "TinyArcade.API.Queries";
 
         public DatabaseService(IConfiguration configuration)
         {
             _connectionString = configuration.GetConnectionString("DefaultConnection");
+
         }
 
         #region query prep
@@ -63,10 +65,12 @@ namespace TinyArcade.API.Services
 
         #region queries
         
+        /// <summary>
+        /// Run on boot
+        /// </summary>
         public void Initialise()
         {
             SQLitePCL.Batteries.Init();
-
             ExecuteQuery("Initialise.sql");
         }
 

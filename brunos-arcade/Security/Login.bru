@@ -18,7 +18,7 @@ body:json {
 }
 
 script:post-response {
-  bru.setEnvVar("bearer_token", res.body.bearer);
+  bru.setEnvVar("bearer_token", res.body.results);
 }
 
 settings {

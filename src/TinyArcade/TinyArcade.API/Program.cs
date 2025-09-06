@@ -37,13 +37,12 @@ builder.Services.AddAuthorization(options =>
 });
 
 
-builder.Services.AddSingleton<IArcadeService, ArcadeService>();
-builder.Services.AddSingleton<IDatabaseService, DatabaseService>();
-builder.Services.AddSingleton<ISecurityService, SecurityService>();
-builder.Services.AddSingleton<ITokenService, TokenService>();
+builder.Services.AddScoped<IArcadeService, ArcadeService>();
+builder.Services.AddScoped<IDatabaseService, DatabaseService>();
+builder.Services.AddScoped<ISecurityService, SecurityService>();
+builder.Services.AddScoped<ITokenService, TokenService>();
 
-//TODO: should be scoped, but I want to fix other stuff first
-builder.Services.AddSingleton<IUserContext, UserContext>();
+builder.Services.AddScoped<IUserContext, UserContext>();
 
 var app = builder.Build();
 
@@ -60,8 +59,9 @@ app.MapControllers();
 
 app.UseMiddleware<UserContextMiddleware>();
 
-
-var dbService = app.Services.GetRequiredService<IDatabaseService>();
-dbService.Initialise();
+app.Services.CreateScope()
+    .ServiceProvider
+    .GetRequiredService<IDatabaseService>()
+    .Initialise();
 
 app.Run();

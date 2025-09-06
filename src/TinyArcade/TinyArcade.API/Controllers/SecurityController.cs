@@ -20,7 +20,7 @@ namespace TinyArcade.API.Controllers
         {
             if (_securityService.Login(credentials.UserName, credentials.Password, out string jwt))
             {
-                return Ok(BaseModel.Ok(bearer: jwt));
+                return Ok(BaseModel.Ok(jwt));
             }
 
             return Unauthorized(BaseModel.Fail());
