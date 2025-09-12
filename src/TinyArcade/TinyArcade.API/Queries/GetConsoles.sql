@@ -1,1 +1,1 @@
-﻿SELECT Id, Name FROM Consoles;
+﻿SELECT Id, EmulatorId, Name FROM Consoles;

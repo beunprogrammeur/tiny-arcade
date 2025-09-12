@@ -7,8 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Queries\GetConsoleById.sql" />
+    <EmbeddedResource Include="Queries\GetEmulatorByGameId.sql" />
+    <EmbeddedResource Include="Queries\AddEmulator.sql" />
+    <EmbeddedResource Include="Queries\GetEmulators.sql" />
     <EmbeddedResource Include="Queries\AddConsole.sql" />
     <EmbeddedResource Include="Queries\GetConsoles.sql" />
+    <EmbeddedResource Include="Queries\GetGameById.sql" />
     <EmbeddedResource Include="Queries\GetGames.sql" />
     <EmbeddedResource Include="Queries\AddGame.sql" />
     <EmbeddedResource Include="Queries\GetUser.sql" />

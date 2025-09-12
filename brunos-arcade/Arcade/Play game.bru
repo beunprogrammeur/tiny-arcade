@@ -1,0 +1,25 @@
+meta {
+  name: Play game
+  type: http
+  seq: 7
+}
+
+post {
+  url: {{BaseURL}}/Arcade/PlayGame
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{bearer_token}}
+}
+
+body:json {
+  {
+    "id": "1"
+  }
+}
+
+settings {
+  encodeUrl: true
+}

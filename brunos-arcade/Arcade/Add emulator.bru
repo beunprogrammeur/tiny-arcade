@@ -1,0 +1,28 @@
+meta {
+  name: Add emulator
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{BaseURL}}/Arcade/AddEmulator
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{bearer_token}}
+}
+
+body:json {
+  {
+    "Name": "RetroArch",
+    "Exe": "Path/to/exe.exe",
+    "Arguments": "-arg1 [[RomFolder]]/[[Rom]]"
+    
+  }
+}
+
+settings {
+  encodeUrl: true
+}

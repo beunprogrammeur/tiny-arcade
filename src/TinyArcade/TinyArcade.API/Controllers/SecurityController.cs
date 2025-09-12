@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TinyArcade.API.Business;
 using TinyArcade.API.Models;
 using TinyArcade.API.Services.Interfaces;
 
@@ -47,7 +48,7 @@ namespace TinyArcade.API.Controllers
         }
 
         [HttpPost("SetRole")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = Constants.RoleAdmin)]
         public IActionResult SetRole([FromBody] CredentialModel credentials)
         {
             if (_securityService.SetRole(credentials.UserName, credentials.Role))

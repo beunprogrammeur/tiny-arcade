@@ -1,7 +1,5 @@
 ﻿using Microsoft.Data.Sqlite;
-using System.Data;
 using TinyArcade.API.DatabaseModels;
-using TinyArcade.API.Models;
 using TinyArcade.API.Services.Interfaces;
 
 namespace TinyArcade.API.Services
@@ -27,14 +25,14 @@ namespace TinyArcade.API.Services
 
             using (var stream = assembly.GetManifestResourceStream(resourceName))
             using (var reader = new StreamReader(stream))
-            return reader.ReadToEnd();
+                return reader.ReadToEnd();
         }
 
         private int ExecuteQuery(string queryFile, params (string, string)[] parameters)
         {
             using var connection = new SqliteConnection(_connectionString);
             connection.Open();
-            
+
             var command = connection.CreateCommand();
             command.CommandText = LoadQuery(queryFile);
 
@@ -64,7 +62,7 @@ namespace TinyArcade.API.Services
         #endregion
 
         #region queries
-        
+
         /// <summary>
         /// Run on boot
         /// </summary>
@@ -76,7 +74,7 @@ namespace TinyArcade.API.Services
 
         #region security
 
-        public void AddUser(string userName, string passwordHash, string role) => 
+        public void AddUser(string userName, string passwordHash, string role) =>
             ExecuteQuery("AddUser.sql",
                 ("@UserName", userName),
                 ("@PasswordHash", passwordHash),
@@ -89,7 +87,7 @@ namespace TinyArcade.API.Services
 
             return reader.Read() && reader.GetInt32(0) > 0;
         }
-            
+
         public void SetUserRole(string userName, string? role) =>
             ExecuteQuery("SetUserRole.sql",
                 ("@UserName", userName),
@@ -122,16 +120,34 @@ namespace TinyArcade.API.Services
 
         #region gaming
 
-        public void AddConsole(DBConsole console) => 
+        public void AddConsole(DBConsole console) =>
             ExecuteQuery("AddConsole.sql",
                 ("@Name", console.Name));
+
+        public DBConsole GetConsole(int id)
+        {
+            using var reader = ExecuteReader("GetConsole.sql",
+                ("@Id", id.ToString()));
+            if (reader.Read())
+            {
+                return new DBConsole()
+                {
+                    Id = reader.GetInt32(0),
+                    Name = reader.GetString(1),
+                    RomFolder = reader.GetString(2)
+                };
+            }
+
+            return null;
+        }
+
 
         public IList<DBConsole> GetConsoles()
         {
             using var reader = ExecuteReader("GetConsoles.sql");
             List<DBConsole> consoles = [];
 
-            while (reader.Read()) 
+            while (reader.Read())
             {
                 consoles.Add(new DBConsole()
                 {
@@ -143,7 +159,7 @@ namespace TinyArcade.API.Services
             return consoles;
         }
 
-        public void AddGame(DBGame game) => 
+        public void AddGame(DBGame game) =>
             ExecuteQuery("AddGame.sql",
                 ("@ConsoleId", game.ConsoleId.ToString()),
                 ("@Name", game.Name),
@@ -168,6 +184,69 @@ namespace TinyArcade.API.Services
 
             return games;
         }
+
+        public DBGame? GetGame(int gameId)
+        {
+            using var reader = ExecuteReader("GetGame.sql",
+                ("@GameId", gameId.ToString()));
+
+            if(reader.Read())
+            {
+                return new DBGame() 
+                { 
+                    ConsoleId = reader.GetInt32(0), 
+                    Name = reader.GetString(1), 
+                    Description = reader.GetString(2) 
+                };
+            }
+
+            return null;
+        }
+
+        public IList<DBEmulator> GetEmulators()
+        {
+            using var reader = ExecuteReader("GetEmulators.sql");
+
+            List<DBEmulator> emulators = [];
+            while (reader.Read())
+            {
+                emulators.Add(new DBEmulator()
+                {
+                    Id = reader.GetInt32(0),
+                    Name = reader.GetString(1),
+                    Path = reader.GetString(2),
+                    Arguments = reader.GetString(3)
+                });
+            }
+
+            return emulators;
+        }
+
+        public void AddEmulator(DBEmulator emulator) =>
+            ExecuteQuery("AddEmulator.sql",
+                ("@Name", emulator.Name),
+                ("@Path", emulator.Path),
+                ("@Arguments", emulator.Arguments));
+
+        public DBEmulator? GetEmulatorByGameId(int id)
+        {
+            using var reader = ExecuteReader("GetEmulatorByGameId.sql",
+                ("@Id", id.ToString()));
+
+            if (reader.Read())
+            {
+                return new DBEmulator()
+                {
+                    Id = reader.GetInt32(0),
+                    Name = reader.GetString(1),
+                    Path = reader.GetString(2),
+                    Arguments = reader.GetString(3)
+                };
+            }
+
+            return null;
+        }
+
 
         #endregion
 

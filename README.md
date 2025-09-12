@@ -17,7 +17,7 @@ if you want to test the API, run requests etc, I've included a bruno collection.
 you can find bruno at [it's own website](https://www.usebruno.com/)
 
 There's a default user, 
-username: Admin
-password: TestPassword
+username: `admin`
+password: `TestPassword`
 
 you should be able to change it's password using the relevant endpoints in the API's Security controller. (See the bruno collection).

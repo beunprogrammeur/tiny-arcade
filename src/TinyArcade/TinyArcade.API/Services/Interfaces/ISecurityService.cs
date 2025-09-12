@@ -4,7 +4,7 @@
     {
         bool Login(string userName, string password, out string jwt);
         bool ChangePassword(string oldPassword, string newPassword);
-        bool SetRole(string userName, string? role);
+        bool SetRole(string userName, string role);
         bool CreateUser(string userName, string password);
     }
 }
